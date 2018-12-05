@@ -109,10 +109,6 @@ HtmlWebpackInlineSourcePlugin.prototype.processTag = function (compilation, rege
   if (assetUrl) {
     // Strip public URL prefix from asset URL to get Webpack asset name
     var publicUrlPrefix = compilation.outputOptions.publicPath || '';
-    // if filename is in subfolder, assetUrl should be prepended folder path
-    if (path.basename(filename) !== filename) {
-      assetUrl = path.dirname(filename) + '/' + assetUrl;
-    }
     var assetName = path.posix.relative(publicUrlPrefix, assetUrl);
     var asset = getAssetByName(compilation.assets, assetName);
     var updatedSource = this.resolveSourceMaps(compilation, assetName, asset);

@@ -153,38 +153,4 @@ describe('HtmlWebpackInlineSourcePlugin', function () {
       });
     });
   });
-
-  it('should embed source and not error if html in subfolder', function (done) {
-    webpack({
-      entry: path.join(__dirname, 'fixtures', 'entry.js'),
-      output: {
-        filename: 'bin/app.js',
-        path: OUTPUT_DIR
-      },
-      module: {
-        rules: [{ test: /\.css$/, use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        }) }]
-      },
-      plugins: [
-        new ExtractTextPlugin('style.css'),
-        new HtmlWebpackPlugin({
-          filename: 'subfolder/index.html',
-          inlineSource: '.(js|css)$'
-        }),
-        new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin)
-      ]
-    }, function (err) {
-      expect(err).toBeFalsy();
-      var htmlFile = path.resolve(OUTPUT_DIR, 'subfolder/index.html');
-      fs.readFile(htmlFile, 'utf8', function (er, data) {
-        expect(er).toBeFalsy();
-        var $ = cheerio.load(data);
-        expect($('script').html()).toContain('.embedded.source');
-        expect($('style').html()).toContain('.embedded.source');
-        done();
-      });
-    });
-  });
 });
